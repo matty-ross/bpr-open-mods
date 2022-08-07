@@ -3,6 +3,7 @@
 <img align="left" src="https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white" />
 <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" />
 Various mods for Burnout Paradise Remastered.
+Precompiled binaries and description for each mod can be found on my website https://matty-ross.github.io/bpr-mods/.
 
 ## Installation
 The solution is self-contained and all dependencies are included in the repository.

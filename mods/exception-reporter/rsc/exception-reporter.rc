@@ -1,0 +1,136 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Slovak (Slovakia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_SKY)
+LANGUAGE LANG_SLOVAK, SUBLANG_DEFAULT
+#pragma code_page(1250)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_EXCEPTION_REPORT_DIALOG DIALOGEX 0, 0, 409, 228
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Exception Report"
+FONT 10, "Consolas", 400, 0, 0xEE
+BEGIN
+    GROUPBOX        "General Information",IDC_GENERAL_INFORMATION_GROUP,6,6,270,84
+    LTEXT           "Code",IDC_CODE_TEXT,18,18,17,10
+    LTEXT           "Description",IDC_DESCRIPTION_TEXT,18,30,45,30
+    LTEXT           "Address",IDC_ADDRESS_TEXT,18,60,29,10
+    LTEXT           "Module Name",IDC_MODULE_NAME_TEXT,18,72,45,10
+    LTEXT           "#",IDC_CODE_VALUE,78,18,180,8
+    LTEXT           "#",IDC_DESCRIPTION_VALUE,78,30,180,24
+    LTEXT           "#",IDC_ADDRESS_VALUE,78,60,180,10
+    LTEXT           "#",IDC_MODULE_NAME_VALUE,78,72,180,10
+    GROUPBOX        "Registers",IDC_REGISTERS_GROUP,6,96,126,126
+    LTEXT           "EAX",IDC_EAX_TEXT,18,108,13,8
+    LTEXT           "EBX",IDC_EBX_TEXT,18,120,13,10
+    LTEXT           "ECX",IDC_ECX_TEXT,18,132,13,8
+    LTEXT           "EDX",IDC_EDX_TEXT,18,144,13,10
+    LTEXT           "ESI",IDC_ESI_TEXT,18,156,13,8
+    LTEXT           "EDI",IDC_EDI_TEXT,18,168,13,8
+    LTEXT           "EBP",IDC_EBP_TEXT,18,180,13,10
+    LTEXT           "ESP",IDC_ESP_TEXT,18,192,13,8
+    LTEXT           "EIP",IDC_EIP_TEXT,18,204,13,10
+    LTEXT           "#",IDC_EAX_VALUE,48,108,72,8
+    LTEXT           "#",IDC_EBX_VALUE,48,120,72,8
+    LTEXT           "#",IDC_ECX_VALUE,48,132,72,8
+    LTEXT           "#",IDC_EDX_VALUE,48,144,72,8
+    LTEXT           "#",IDC_ESI_VALUE,48,156,72,8
+    LTEXT           "#",IDC_EDI_VALUE,48,168,72,8
+    LTEXT           "#",IDC_EBP_VALUE,48,180,72,8
+    LTEXT           "#",IDC_ESP_VALUE,48,192,72,8
+    LTEXT           "#",IDC_EIP_VALUE,48,204,72,8
+    GROUPBOX        "Additional Information",IDC_ADDITIONAL_INFORMATION_GROUP,156,96,120,126
+    LTEXT           "#",IDC_ADDITIONAL_INFORMATION_VALUE,168,108,96,102
+    GROUPBOX        "Stack Trace",IDC_STACK_TRACE_GROUP,300,6,102,216
+    LTEXT           "#",IDC_STACK_TRACE_VALUE,312,18,78,192
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_EXCEPTION_REPORT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 402
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 221
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_EXCEPTION_REPORT_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // Slovak (Slovakia) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

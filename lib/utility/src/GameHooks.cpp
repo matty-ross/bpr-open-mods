@@ -35,6 +35,7 @@ namespace Utility {
             {
                 .HookAddress = Pointer(0x0148600C).Field(0x0).Field(0x20).As<void*>(),
                 .DetourFunction = PresentThunk,
+                .Parameter = nullptr,
                 .PreserveFlags = true,
                 .PreserveRegisters = true
             }
@@ -49,6 +50,7 @@ namespace Utility {
             {
                 .HookAddress = 0x0673A070,
                 .DetourFunction = UpdateThunk,
+                .Parameter = nullptr,
                 .PreserveFlags = true,
                 .PreserveRegisters = true
             }
@@ -66,12 +68,12 @@ namespace Utility {
         return result;
     }
 
-    void GameHooks::PresentThunk()
+    void GameHooks::PresentThunk(void*)
     {
         s_Present();
     }
 
-    void GameHooks::UpdateThunk()
+    void GameHooks::UpdateThunk(void*)
     {
         s_Update();
     }

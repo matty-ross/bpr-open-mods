@@ -48,7 +48,7 @@ namespace Utility {
 
     Pointer Detour::AllocateThunk() const
     {
-        void* const thunk = ::VirtualAlloc(nullptr, 0x10, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+        void* const thunk = ::VirtualAlloc(nullptr, 32, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
         if (thunk == nullptr)
         {
             throw WINDOWS_EXCEPTION("Failed to allocate a detour thunk for a detour at 0x{:08X}.", m_Config.HookAddress.GetAddress<uintptr_t>());
@@ -77,6 +77,15 @@ namespace Utility {
             thunk.GetAddress<uint8_t*>() += 1;
         }
 
+        // push parameter
+        {
+            // push m_Config.Parameter
+            thunk.At(0x0).As<uint8_t>() = 0x68;
+            thunk.At(0x1).As<uint32_t>() = Pointer(m_Config.Parameter).GetAddress<uint32_t>();
+
+            thunk.GetAddress<uint8_t*>() += 5;
+        }
+
         // call detour function
         {
             // call m_Config.DetourFunction
@@ -84,6 +93,16 @@ namespace Utility {
             thunk.At(0x1).As<uint32_t>() = GetRelativeDisplacement(thunk, m_Config.DetourFunction);
 
             thunk.GetAddress<uint8_t*>() += 5;
+        }
+
+        // fix stack pointer
+        {
+            // add esp, 4
+            thunk.At(0x0).As<uint8_t>() = 0x83;
+            thunk.At(0x1).As<uint8_t>() = 0xC4;
+            thunk.At(0x2).As<uint8_t>() = 0x04;
+
+            thunk.GetAddress<uint8_t*>() += 3;
         }
 
         // restore registers

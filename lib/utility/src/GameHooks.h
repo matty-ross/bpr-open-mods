@@ -17,8 +17,8 @@ namespace Utility {
 
     private:
         static LRESULT CALLBACK WindowProcThunk(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
-        static void PresentThunk();
-        static void UpdateThunk();
+        static void PresentThunk(void*);
+        static void UpdateThunk(void*);
 
     private:
         inline static std::function<std::pair<bool, LRESULT>(HWND, UINT, WPARAM, LPARAM)> s_WindowProc;

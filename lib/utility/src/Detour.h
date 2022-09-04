@@ -9,7 +9,8 @@ namespace Utility {
     struct DetourConfig
     {
         Pointer HookAddress;
-        void(*DetourFunction)();
+        void(__cdecl* DetourFunction)(void*);
+        void* Parameter;
         bool PreserveFlags;
         bool PreserveRegisters;
     };

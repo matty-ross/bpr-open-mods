@@ -19,7 +19,6 @@ namespace Utility {
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGui::StyleColorsClassic();
         
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = m_IniFilePath.c_str();
@@ -44,9 +43,8 @@ namespace Utility {
 
     void ImGuiManager::AddItem(const ImGuiItem& item)
     {
-        m_Mutex.lock();
+        const std::lock_guard mutext(m_Mutex);
         m_Items.emplace_back(item);
-        m_Mutex.unlock();
     }
 
     void ImGuiManager::RenderImGui()
@@ -58,16 +56,17 @@ namespace Utility {
         ImGuiIO& io = ImGui::GetIO();
         io.MouseDrawCursor = false;
 
-        m_Mutex.lock();
-        for (const ImGuiItem& item : m_Items)
         {
-            if (item.Visible)
+            const std::lock_guard mutext(m_Mutex);
+            for (const ImGuiItem& item : m_Items)
             {
-                io.MouseDrawCursor = true;
-                item.RenderFunction();
+                if (item.Visible)
+                {
+                    io.MouseDrawCursor = true;
+                    item.RenderFunction();
+                }
             }
         }
-        m_Mutex.unlock();
 
         ImGui::Render();
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -104,7 +103,7 @@ namespace Utility {
                 const bool repeat = HIWORD(lParam) & KF_REPEAT;
                 if (!repeat)
                 {
-                    m_Mutex.lock();
+                    const std::lock_guard mutext(m_Mutex);
                     for (ImGuiItem& item : m_Items)
                     {
                         if (item.ToggleHotkey == wParam)
@@ -112,7 +111,6 @@ namespace Utility {
                             item.Visible = !item.Visible;
                         }
                     }
-                    m_Mutex.unlock();
                 }
 
                 Pointer(0x013FC8E0).Field(0x71BF00).As<bool>() = !io.WantCaptureKeyboard;

@@ -1,9 +1,13 @@
+#pragma comment(lib, "DbgHelp.lib")
+
+
 #include "ExceptionReport.h"
 
 #include <string>
 #include <format>
 
 #include <Windows.h>
+#include <dbghelp.h>
 
 #include "Pointer.h"
 
@@ -20,8 +24,7 @@ ExceptionReport::ExceptionReport(const EXCEPTION_POINTERS* exceptionPointers)
 void ExceptionReport::Display(HINSTANCE dllInstance) const
 {
     const LPARAM parameter = reinterpret_cast<LPARAM>(this);
-    
-    DialogBoxParamA(dllInstance, MAKEINTRESOURCEA(IDD_EXCEPTION_REPORT_DIALOG), nullptr, DialogProc, parameter);
+    ::DialogBoxParamA(dllInstance, MAKEINTRESOURCEA(IDD_EXCEPTION_REPORT_DIALOG), nullptr, DialogProc, parameter);
 }
 
 std::string ExceptionReport::GetCode() const
@@ -164,7 +167,7 @@ std::string ExceptionReport::GetRegisterValue(RegisterName registerName) const
 
 std::string ExceptionReport::GetAdditionalInformation() const
 {
-    std::string additionalInformation = "";
+    std::string additionalInformation;
     for (size_t i = 0; i < m_ExceptionRecord.NumberParameters; ++i)
     {
         additionalInformation += std::format("0x{:08X}\n", m_ExceptionRecord.ExceptionInformation[i]);
@@ -175,36 +178,45 @@ std::string ExceptionReport::GetAdditionalInformation() const
 
 std::string ExceptionReport::GetStackTrace() const
 {
-    std::string stackTrace = "";
-
-    struct StackFrame
+    STACKFRAME stackFrame =
     {
-        StackFrame* PreviousStackFrame;
-        void* ReturnAddress;
-    };
-
-    const StackFrame* stackFrame = Utility::Pointer(m_ContextRecord.Ebp).GetAddress<StackFrame*>();
-    bool done = false;
-    
-    auto getStackFrame = [&]()
-    {
-        __try
+        .AddrPC =
         {
-            char buffer[16] = {};
-            sprintf_s(buffer, "0x%p\n", stackFrame->ReturnAddress);
-            
-            stackTrace += buffer;
-            stackFrame = stackFrame->PreviousStackFrame;
-        }
-        __except (EXCEPTION_EXECUTE_HANDLER)
+            .Offset = m_ContextRecord.Eip,
+            .Segment = 0,
+            .Mode = AddrModeFlat
+        },
+        .AddrFrame =
         {
-            done = true;
+            .Offset = m_ContextRecord.Ebp,
+            .Segment = 0,
+            .Mode = AddrModeFlat
+        },
+        .AddrStack =
+        {
+            .Offset = m_ContextRecord.Esp,
+            .Segment = 0,
+            .Mode = AddrModeFlat
         }
     };
     
-    while (!done)
+    CONTEXT context = m_ContextRecord;
+
+    std::string stackTrace;
+    for (int i = 0; i < 25; ++i)
     {
-        getStackFrame();
+        if (::StackWalk(IMAGE_FILE_MACHINE_I386, ::GetCurrentProcess(), ::GetCurrentThread(), &stackFrame, &context, nullptr, nullptr, nullptr, nullptr) == FALSE)
+        {
+            break;
+        }
+
+        const uintptr_t returnAddress = stackFrame.AddrReturn.Offset;
+        stackTrace += std::format("0x{:08X}\n", returnAddress);
+
+        if (returnAddress == 0)
+        {
+            break;
+        }
     }
 
     return stackTrace;

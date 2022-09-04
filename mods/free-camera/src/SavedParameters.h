@@ -34,12 +34,12 @@ public:
     void SaveParameters() const;
     void AddCurrentParameters(const std::string& name);
     void SetCurrentParameters(const Parameters& parameters) const;
-    static void ResetDefaultParameters();
-    static void SaveDefaultParameters();
+    void ResetDefaultParameters();
+    static void SaveDefaultParameters(void* parameter);
 
 private:
     const Utility::Logger& m_Logger;
     std::string m_ParametersFilePath;
     std::vector<Parameters> m_Parameters;
-    inline static uint8_t s_DefaultParameters[0xAC];
+    uint8_t m_DefaultParameters[0xAC];
 };

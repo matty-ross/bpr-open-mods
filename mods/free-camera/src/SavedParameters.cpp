@@ -12,6 +12,7 @@ SavedParameters::SavedParameters(const Utility::Logger& logger, const std::strin
     m_Logger(logger),
     m_ParametersFilePath(parametersFilePath)
 {
+    memset(m_DefaultParameters, 0, sizeof(m_DefaultParameters));
 }
 
 const std::vector<Parameters>& SavedParameters::GetParameters() const
@@ -132,10 +133,11 @@ void SavedParameters::SetCurrentParameters(const Parameters& parameters) const
 
 void SavedParameters::ResetDefaultParameters()
 {
-    memcpy_s(Utility::Pointer(0x013FC8E0).Field(0x7165C8).GetAddress(), 0xAC, s_DefaultParameters, sizeof(s_DefaultParameters));
+    memcpy_s(Utility::Pointer(0x013FC8E0).Field(0x7165C8).GetAddress(), 0xAC, m_DefaultParameters, sizeof(m_DefaultParameters));
 }
 
-void SavedParameters::SaveDefaultParameters()
+void SavedParameters::SaveDefaultParameters(void* parameter)
 {
-    memcpy_s(s_DefaultParameters, sizeof(s_DefaultParameters), Utility::Pointer(0x013FC8E0).Field(0x7165C8).GetAddress(), 0xAC);
+    SavedParameters& savedParameters = Utility::Pointer(parameter).As<SavedParameters>();
+    memcpy_s(savedParameters.m_DefaultParameters, sizeof(savedParameters.m_DefaultParameters), Utility::Pointer(0x013FC8E0).Field(0x7165C8).GetAddress(), 0xAC);
 }

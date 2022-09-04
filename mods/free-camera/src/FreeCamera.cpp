@@ -6,16 +6,16 @@
 #include "GameHooks.h"
 
 
-static const char* const s_ModTitle = "Free Camera";
-static const std::string s_ModDirectory = ".\\mods\\free-camera\\";
+static const std::string k_ModTitle = "Free Camera";
+static const std::string k_ModDirectory = ".\\mods\\free-camera\\";
 
 
 FreeCamera::FreeCamera(HINSTANCE dllInstance)
     :
     Mod(dllInstance),
-    m_Logger(s_ModDirectory + "log.txt"),
-    m_ImGuiManager(s_ModDirectory + "imgui.ini"),
-    m_SavedParameters(m_Logger, s_ModDirectory + "saved-parameters.yaml"),
+    m_Logger(k_ModDirectory + "log.txt"),
+    m_ImGuiManager(k_ModDirectory + "imgui.ini"),
+    m_SavedParameters(m_Logger, k_ModDirectory + "saved-parameters.yaml"),
     m_Gui(m_SavedParameters, m_ManualController),
     m_LoadStage(LoadStage::Init)
 {
@@ -37,10 +37,6 @@ bool FreeCamera::Load()
             {
                 m_LoadStage = LoadStage::InitMod;
             }
-            else
-            {
-                ::Sleep(100);
-            }
             break;
         
         case LoadStage::InitMod:
@@ -58,10 +54,6 @@ bool FreeCamera::Load()
             {
                 m_LoadStage = LoadStage::InitImGui;
             }
-            else
-            {
-                ::Sleep(1000);
-            }
             break;
 
         case LoadStage::InitImGui:
@@ -76,20 +68,17 @@ bool FreeCamera::Load()
     }
     catch (const Utility::Exception& exception)
     {
-        LOG_ERROR(m_Logger, exception.GetDescription());
-        ::MessageBoxA(nullptr, exception.GetSummary().c_str(), s_ModTitle, MB_ICONERROR);
+        HandleException(exception.GetSummary());
         return true;
     }
     catch (const std::exception& exception)
     {
-        LOG_ERROR(m_Logger, exception.what());
-        ::MessageBoxA(nullptr, exception.what(), s_ModTitle, MB_ICONERROR);
+        HandleException(exception.what());
         return true;
     }
     catch (...)
     {
-        LOG_ERROR(m_Logger, "Unknown exception.");
-        ::MessageBoxA(nullptr, "Unknown exception.", s_ModTitle, MB_ICONERROR);
+        HandleException("Unknown exception.");
         return true;
     }
 
@@ -99,11 +88,11 @@ bool FreeCamera::Load()
 void FreeCamera::OnInit() const
 {
     if (
-        ::CreateDirectoryA(s_ModDirectory.c_str(), nullptr) == FALSE &&
+        ::CreateDirectoryA(k_ModDirectory.c_str(), nullptr) == FALSE &&
         ::GetLastError() != ERROR_ALREADY_EXISTS
     )
     {
-        throw WINDOWS_EXCEPTION("Failed to create a mod directory '{}'.", s_ModDirectory);
+        throw WINDOWS_EXCEPTION("Failed to create a mod directory '{}'.", k_ModDirectory);
     }
 }
 
@@ -115,6 +104,7 @@ bool FreeCamera::OnWaitForGameInit() const
         return true;
     }
     
+    ::Sleep(100);
     return false;
 }
 
@@ -150,6 +140,7 @@ void FreeCamera::OnInitHooks()
         {
             .HookAddress = 0x06768EB7,
             .DetourFunction = SavedParameters::SaveDefaultParameters,
+            .Parameter = &m_SavedParameters,
             .PreserveFlags = true,
             .PreserveRegisters = true
         }
@@ -166,6 +157,7 @@ bool FreeCamera::OnWaitForInGame() const
         return true;
     }
     
+    ::Sleep(1000);
     return false;
 }
 
@@ -175,7 +167,7 @@ void FreeCamera::OnInitImGui()
 
     m_ImGuiManager.AddItem(
         {
-            .RenderFunction = [this]() { m_Gui.Render(); },
+            .RenderFunction = [this]() { m_Gui.Render(k_ModTitle); },
             .ToggleHotkey = VK_F4,
             .Visible = false
         }
@@ -187,4 +179,10 @@ void FreeCamera::OnInitImGui()
 void FreeCamera::OnDone() const
 {
     LOG_INFO(m_Logger, "Mod done loading.");
+}
+
+void FreeCamera::HandleException(const std::string& message) const
+{
+    LOG_ERROR(m_Logger, message);
+    ::MessageBoxA(nullptr, message.c_str(), k_ModTitle.c_str(), MB_ICONERROR);
 }

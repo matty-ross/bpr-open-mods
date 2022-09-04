@@ -10,16 +10,19 @@ Gui::Gui(SavedParameters& savedParameters, ManualController& manualController)
     m_SavedParameters(savedParameters),
     m_ManualController(manualController)
 {
+    ImGui::StyleColorsClassic();
 }
 
-void Gui::Render()
+void Gui::Render(const std::string& title)
 {
-    if (ImGui::Begin("Free Camera"))
+    if (ImGui::Begin(title.c_str()))
     {
+        static constexpr const char* const author = "PISros0724 (Matty)";
+        static constexpr int version = 2;
         const ImGuiIO& io = ImGui::GetIO();
         
-        ImGui::Text("Mod by PISros0724 (Matty)");
-        ImGui::Text("Version: 1");
+        ImGui::Text("Mod by %s", author);
+        ImGui::Text("Version: %d", version);
         ImGui::Text("Framerate: %.3f", io.Framerate);
         
         RenderMisc();
@@ -75,7 +78,7 @@ void Gui::RenderParameters()
         ImGui::SliderFloat("Drop Factor", &Utility::Pointer(0x013FC8E0).Field(0x716670).As<float>(), 0.0f, 1.0f, "%.2f", flagsLinear);
         if (ImGui::Button("Reset Default Parameters"))
         {
-            SavedParameters::ResetDefaultParameters();
+            m_SavedParameters.ResetDefaultParameters();
         }
 
         ImGui::Separator();
@@ -97,15 +100,20 @@ void Gui::RenderParameters()
         static ImGuiTextFilter filter;
         if (ImGui::BeginListBox("Saved Parameters"))
         {
+            int id = 0;
             for (const Parameters& parameters : m_SavedParameters.GetParameters())
             {
                 if (filter.PassFilter(parameters.Name.c_str()))
                 {
+                    ImGui::PushID(id);
                     if (ImGui::Selectable(parameters.Name.c_str()))
                     {
                         m_SavedParameters.SetCurrentParameters(parameters);
                     }
+                    ImGui::PopID();
                 }
+                
+                ++id;
             }
 
             ImGui::EndListBox();

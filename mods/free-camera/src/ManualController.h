@@ -17,10 +17,12 @@ public:
     void UpdateTransformation();
 
 private:
-    DirectX::XMFLOAT4X4& GetTransformation() const;
-    float WrapAngle(float angle) const;
+    static DirectX::XMFLOAT4X4* GetTransformation();
+    static float WrapAngle(float angle);
+    static DirectX::XMFLOAT3 GetEulerAnglesFromQuaternion(const DirectX::XMVECTOR& quaternion);
 
 private:
+    DirectX::XMFLOAT3 m_Scaling;
     DirectX::XMFLOAT3 m_Rotation;
     DirectX::XMFLOAT3 m_Translation;
 };

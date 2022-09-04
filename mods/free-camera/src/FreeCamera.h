@@ -35,6 +35,7 @@ private:
     bool OnWaitForInGame() const;
     void OnInitImGui();
     void OnDone() const;
+    void HandleException(const std::string& message) const;
 
 private:
     Utility::Logger m_Logger;

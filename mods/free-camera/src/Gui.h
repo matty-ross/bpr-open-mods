@@ -1,6 +1,8 @@
 #pragma once
 
 
+#include <string>
+
 #include "SavedParameters.h"
 #include "ManualController.h"
 
@@ -10,7 +12,7 @@ class Gui
 public:
     Gui(SavedParameters& savedParameters, ManualController& manualController);
 
-    void Render();
+    void Render(const std::string& title);
 
 private:
     void RenderMisc();

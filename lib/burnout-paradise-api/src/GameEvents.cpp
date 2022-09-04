@@ -11,7 +11,7 @@ namespace BP {
         {
             push dword ptr [eventDataSize]
             push dword ptr [eventType]
-            push dword ptr [eventData]
+            push eventData
 
             mov ecx, dword ptr ds:[0x013FC8E0]
             add ecx, 0x6E0E70

@@ -21,7 +21,7 @@ namespace BP {
         uint64_t VehicleID;
         uint64_t WheelID;
 
-        bool Add()
+        bool Add() const
         {
             return AddGameEvent(this, 0, sizeof(*this));
         }
@@ -33,7 +33,7 @@ namespace BP {
         float Position[4];
         float Direction[4];
 
-        bool Add()
+        bool Add() const
         {
             return AddGameEvent(this, 1, sizeof(*this));
         }
@@ -47,7 +47,7 @@ namespace BP {
         bool ResetCamera;
         bool KeepResetSection;
 
-        bool Add()
+        bool Add() const
         {
             return AddGameEvent(this, 2, sizeof(*this));
         }

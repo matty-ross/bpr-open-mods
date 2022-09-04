@@ -8,10 +8,10 @@ Precompiled binaries and description for each mod can be found on my website htt
 ## Installation
 The solution is self-contained and all dependencies are included in the repository.
 Here are the instructions to build the solution yourself:
-1. download the repository
-2. open in Visual Studio
-3. select x86 platform
-4. build solution
+1. Download the repository
+2. Open in Visual Studio
+3. Select x86 platform
+4. Build solution
 
 ## Third party libraries
 Projects in `vendor` directory are third party libraries.
